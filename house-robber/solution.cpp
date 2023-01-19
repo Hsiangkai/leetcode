@@ -6,29 +6,28 @@
 using namespace std;
 
 class Solution {
-    map<int, int> _dict;
-    int rob_internal(vector<int>& nums, int begin) {
+    int rob_internal(vector<int>& nums, map<int, int> &dict, int begin) {
       if (begin >= nums.size())
 	return 0;
 
-      if (_dict.find(begin) != _dict.end())
-	return _dict[begin];
+      if (dict.find(begin) != dict.end())
+	return dict[begin];
 
       int ret;
       if (begin == nums.size() - 1)
-	ret = nums[begin] + rob_internal(nums, begin + 2);
+	ret = nums[begin] + rob_internal(nums, dict, begin + 2);
       else
-        ret = max(nums[begin] + rob_internal(nums, begin + 2),
-	          nums[begin + 1] + rob_internal(nums, begin + 3));
+        ret = max(nums[begin] + rob_internal(nums, dict, begin + 2),
+	          nums[begin + 1] + rob_internal(nums, dict, begin + 3));
 
-      _dict[begin] = ret;
+      dict[begin] = ret;
       return ret;
     }
 
 public:
     int rob(vector<int>& nums) {
-      _dict.clear();
-      return rob_internal(nums, 0);
+      map<int, int> dict;
+      return rob_internal(nums, dict, 0);
     }
 };
 
