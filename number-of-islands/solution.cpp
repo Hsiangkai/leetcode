@@ -5,20 +5,22 @@ using namespace std;
 
 class Solution {
   private:
-    const vector<vector<int>> directions{{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
-
     void dfs(vector<vector<char>>& grid, int x, int y, int row, int col,
 	vector<vector<bool>> &visited) {
+      int x_offset[] = {0, 0, 1, -1};
+      int y_offset[] = {1, -1, 0, 0};
 
-      visited[x][y] = true;
+      for (int i = 0; i < 4; ++i) {
+	int new_x = x + x_offset[i];
+	int new_y = y + y_offset[i];
 
-      for (auto dir : directions) {
-	int new_x = x + dir[0];
-	int new_y = y + dir[1];
-
-	if (new_x >= 0 && new_x < row && new_y >=0 && new_y < col &&
-	    grid[new_x][new_y] == '1' && visited[new_x][new_y] == false) {
-	  dfs(grid, new_x, new_y, row, col, visited);
+	if (new_x >= 0 && new_x < row && new_y >=0 && new_y < col) {
+	  if (visited[new_x][new_y] == false) {
+	    visited[new_x][new_y] = true;
+	    if (grid[new_x][new_y] == '1') {
+	      dfs(grid, new_x, new_y, row, col, visited);
+	    }
+	  }
 	}
       }
     }
@@ -32,7 +34,7 @@ class Solution {
       int num_of_island = 0;
       for (int i = 0; i < row; ++i) {
 	for (int j = 0; j < col; ++j) {
-	  if (visited[i][j] == false && grid[i][j] == '1') {
+	  if (grid[i][j] == '1' && visited[i][j] == false) {
 	    dfs(grid, i, j, row, col, visited);
 	    num_of_island++;
 	  }
